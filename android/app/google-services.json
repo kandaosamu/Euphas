@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "335631819258",
+    "project_id": "euphas-edfba",
+    "storage_bucket": "euphas-edfba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335631819258:android:3ff0eb53253b167a760443",
+        "android_client_info": {
+          "package_name": "com.example.euphas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-HkcZ2dCzC2jxEPWRQoKlVMWUTYjXAQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
