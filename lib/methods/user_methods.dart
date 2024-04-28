@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -42,5 +43,11 @@ class UserMethods {
       }
     }
     return eMsg;
+  }
+  Future addMsg(Map<String, dynamic> msgMap, String msgID) async{
+    return await FirebaseFirestore.instance.collection('chats/WvUOok7hlsWsM6t0LQYo/msg').doc(msgID).set(msgMap);
+  }
+  Future<Stream<QuerySnapshot>> getMsg() async {
+    return await FirebaseFirestore.instance.collection('chats/WvUOok7hlsWsM6t0LQYo/msg').snapshots();
   }
 }

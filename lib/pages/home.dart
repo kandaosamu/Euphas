@@ -10,6 +10,8 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class _Home extends State<Home> {
         leading: IconButton(
           icon: const Icon(Icons.cancel),
           onPressed: () {
-            FirebaseFirestore.instance.collection('chats/WvUOok7hlsWsM6t0LQYo/msg').doc('FKPjEpof9PXk5MvLxVgK').delete();
+            // FirebaseFirestore.instance.collection('chats/WvUOok7hlsWsM6t0LQYo/msg').doc().delete();
             setState(() {});
           },
         ),
@@ -41,14 +43,28 @@ class _Home extends State<Home> {
                             child: Text(snapshot.data?.docs[index]['text']),
                           ),
               )),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection('chats/WvUOok7hlsWsM6t0LQYo/msg')
-              .add({'text': 'add new line'});
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              FirebaseFirestore.instance
+                  .collection("chats/WvUOok7hlsWsM6t0LQYo/msg")
+                  .add({'text': 'o'}).then((DocumentReference doc) {
+                    print('id is ${doc.id}');
+              });
+            },
+          ),
+          FloatingActionButton(
+            child: const Icon(Icons.cancel),
+            onPressed: (){
+              FirebaseFirestore.instance.doc('chats/WvUOok7hlsWsM6t0LQYo/msg/doc1').delete();
+            },
+          ),
+        ],
       ),
     );
   }
 }
+
