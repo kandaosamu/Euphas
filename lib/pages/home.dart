@@ -10,7 +10,8 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-
+  final chatController = TextEditingController();
+  String temporaryID = '';
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +54,15 @@ class _Home extends State<Home> {
                   .collection("chats/WvUOok7hlsWsM6t0LQYo/msg")
                   .add({'text': 'o'}).then((DocumentReference doc) {
                     print('id is ${doc.id}');
+                    temporaryID = doc.id;
               });
             },
           ),
           FloatingActionButton(
             child: const Icon(Icons.cancel),
             onPressed: (){
-              FirebaseFirestore.instance.doc('chats/WvUOok7hlsWsM6t0LQYo/msg/doc1').delete();
+              FirebaseFirestore.instance.doc('chats/WvUOok7hlsWsM6t0LQYo/msg/$temporaryID').delete();
+              print('delete $temporaryID');
             },
           ),
         ],
