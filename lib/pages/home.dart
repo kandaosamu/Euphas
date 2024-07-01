@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,19 +13,18 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   final chatController = TextEditingController();
+  dynamic userID = FirebaseAuth.instance.currentUser?.uid;
   String temporaryID = '';
+  String name = '';
 
   @override
   Widget build(BuildContext context) {
+    fetchName();
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.cancel),
-          onPressed: () {
-            // FirebaseFirestore.instance.collection('chats/WvUOok7hlsWsM6t0LQYo/msg').doc().delete();
-            setState(() {});
-          },
-        ),
+        backgroundColor: Colors.amber,
+        centerTitle: true,
+        title: Text(name),
         actions: [
           IconButton(onPressed: (){
             FirebaseAuth.instance.signOut();
@@ -44,6 +45,17 @@ class _Home extends State<Home> {
                             child: Text(snapshot.data?.docs[index]['text']),
                           ),
               )),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(decoration: BoxDecoration(),child: Text('選單'),),
+            ListTile(
+              title: const Text('帳號'),
+              onTap: (){},
+            )
+          ],
+        ),
+      ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -68,6 +80,13 @@ class _Home extends State<Home> {
         ],
       ),
     );
+  }
+  fetchName()async{
+    DocumentSnapshot data = await FirebaseFirestore.instance.collection('users').doc(userID).get();
+    if (data.exists) {
+      Map<String, dynamic>? fetchDoc = data.data() as Map<String, dynamic>?;
+      name = fetchDoc?['username'];
+    }
   }
 }
 

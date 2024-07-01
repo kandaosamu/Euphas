@@ -1,18 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-
 import '../methods/user_methods.dart';
-import 'register.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Login> createState() => _Login();
+  State<Register> createState() => _Register();
 }
 
-class _Login extends State<Login> {
+class _Register extends State<Register> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -24,11 +23,9 @@ class _Login extends State<Login> {
           Row(
             children: [
               Expanded(
-                  child: Container(
-                      color: const Color.fromRGBO(135, 200, 250, 50))),
+                  child: Container(color: const Color.fromRGBO(135, 200, 250, 50))),
               Expanded(
-                  child:
-                      Container(color: const Color.fromRGBO(25, 25, 112, 40))),
+                  child: Container(color: const Color.fromRGBO(25, 25, 112, 40))),
             ],
           ),
           Padding(
@@ -58,6 +55,14 @@ class _Login extends State<Login> {
                           height: 50,
                         ),
                         TextField(
+                            controller: nameController,
+                            obscureText: false,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.email),
+                              labelText: '名稱',
+                            )),
+                        const SizedBox(height: 30,),
+                        TextField(
                             controller: emailController,
                             obscureText: false,
                             decoration: const InputDecoration(
@@ -65,7 +70,7 @@ class _Login extends State<Login> {
                               labelText: 'Email',
                               hintText: 'XXX@gmail.com',
                             )),
-                        const SizedBox(height: 50,),
+                        const SizedBox(height: 30,),
                         TextField(
                             controller: passwordController,
                             obscureText: false,
@@ -73,34 +78,30 @@ class _Login extends State<Login> {
                               prefixIcon: Icon(Icons.key),
                               labelText: '密碼',
                             )),
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                                onPressed: () {}, child: const Text('忘記密碼？'))),
-                        const SizedBox(height: 30,),
+                        const SizedBox(height: 50,),
                         SizedBox(
                           width: 500,
                           child: ElevatedButton(
                               onPressed: () async {
                                 dynamic signInFeedback = await UserMethods()
-                                    .signIn(emailController.text,
-                                        passwordController.text);
+                                    .signUp(emailController.text,
+                                    passwordController.text,nameController.text);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         behavior: SnackBarBehavior.floating,
                                         content: Text(signInFeedback)));
                               },
-                              child: const Text('登入')),
+                              child: const Text('註冊')),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text('沒有帳號？'),
+                            const Text('已有帳號？'),
                             TextButton(
                                 onPressed: () {
-                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>Register()));
+                                  Navigator.pop(context);
                                 },
-                                child: const Text('註冊')),
+                                child: const Text('登入')),
                           ],
                         ),
                       ],

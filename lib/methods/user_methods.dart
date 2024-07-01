@@ -1,15 +1,16 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class UserMethods {
-
   Future<String?> signIn(String email, String password) async {
     String? eMsg;
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+
     } on FirebaseAuthException catch (e) {
-      print('登入錯誤：''$e.code');
+      print('登入錯誤：' '$e.code');
       switch (e.code) {
         case 'invalid-email':
           eMsg = '無效電子信箱';
@@ -25,12 +26,19 @@ class UserMethods {
     }
     return eMsg;
   }
-  Future<String?> signUp(String email, String password) async {
+
+  Future<String?> signUp(String email, String password, String username) async {
     String? eMsg;
     try {
-       await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      dynamic signUpResult;
+      signUpResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      FirebaseFirestore.instance.collection('users').doc(signUpResult.user.uid).set({
+        'username' : username,
+        'email' : email,
+      });
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      print('登入錯誤：''$e.code');
+      print('登入錯誤：' '$e.code');
       switch (e.code) {
         case 'invalid-email':
           eMsg = '無效電子信箱';
@@ -44,10 +52,17 @@ class UserMethods {
     }
     return eMsg;
   }
-  Future addMsg(Map<String, dynamic> msgMap, String msgID) async{
-    return await FirebaseFirestore.instance.collection('chats/WvUOok7hlsWsM6t0LQYo/msg').doc(msgID).set(msgMap);
+
+  Future addMsg(Map<String, dynamic> msgMap, String msgID) async {
+    return FirebaseFirestore.instance
+        .collection('chats/WvUOok7hlsWsM6t0LQYo/msg')
+        .doc(msgID)
+        .set(msgMap);
   }
+
   Future<Stream<QuerySnapshot>> getMsg() async {
-    return await FirebaseFirestore.instance.collection('chats/WvUOok7hlsWsM6t0LQYo/msg').snapshots();
+    return FirebaseFirestore.instance
+        .collection('chats/WvUOok7hlsWsM6t0LQYo/msg')
+        .snapshots();
   }
 }
