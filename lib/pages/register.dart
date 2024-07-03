@@ -14,6 +14,7 @@ class _Register extends State<Register> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String? groupValue;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +24,11 @@ class _Register extends State<Register> {
           Row(
             children: [
               Expanded(
-                  child: Container(color: const Color.fromRGBO(135, 200, 250, 50))),
+                  child: Container(
+                      color: const Color.fromRGBO(135, 200, 250, 50))),
               Expanded(
-                  child: Container(color: const Color.fromRGBO(25, 25, 112, 40))),
+                  child:
+                      Container(color: const Color.fromRGBO(25, 25, 112, 40))),
             ],
           ),
           Padding(
@@ -49,7 +52,7 @@ class _Register extends State<Register> {
                       children: [
                         const Icon(
                           Icons.account_circle_rounded,
-                          size: 70,
+                          size: 50,
                         ),
                         const SizedBox(
                           height: 50,
@@ -61,7 +64,9 @@ class _Register extends State<Register> {
                               prefixIcon: Icon(Icons.email),
                               labelText: '名稱',
                             )),
-                        const SizedBox(height: 30,),
+                        const SizedBox(
+                          height: 30,
+                        ),
                         TextField(
                             controller: emailController,
                             obscureText: false,
@@ -70,7 +75,9 @@ class _Register extends State<Register> {
                               labelText: 'Email',
                               hintText: 'XXX@gmail.com',
                             )),
-                        const SizedBox(height: 30,),
+                        const SizedBox(
+                          height: 30,
+                        ),
                         TextField(
                             controller: passwordController,
                             obscureText: false,
@@ -78,14 +85,46 @@ class _Register extends State<Register> {
                               prefixIcon: Icon(Icons.key),
                               labelText: '密碼',
                             )),
-                        const SizedBox(height: 50,),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('你是...'),
+                            Radio<String>(
+                              value: "patient",
+                              groupValue: groupValue,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  groupValue = value;
+                                });
+                              },
+                            ),
+                            const Text('患者/家屬'),
+                            Radio<String>(
+                                value: "therapist",
+                                groupValue: groupValue,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    groupValue = value;
+                                  });
+                                }),
+                            const Text('治療師'),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
                         SizedBox(
                           width: 500,
                           child: ElevatedButton(
                               onPressed: () async {
-                                dynamic signInFeedback = await UserMethods()
-                                    .signUp(emailController.text,
-                                    passwordController.text,nameController.text);
+                                dynamic signInFeedback =
+                                    await UserMethods().signUp(
+                                  emailController.text,
+                                  passwordController.text,
+                                  nameController.text,
+                                  groupValue!,
+                                );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         behavior: SnackBarBehavior.floating,
@@ -116,5 +155,3 @@ class _Register extends State<Register> {
     );
   }
 }
-
-

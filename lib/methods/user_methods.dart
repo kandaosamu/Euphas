@@ -27,7 +27,7 @@ class UserMethods {
     return eMsg;
   }
 
-  Future<String?> signUp(String email, String password, String username) async {
+  Future<String?> signUp(String email, String password, String username,String type) async {
     String? eMsg;
     try {
       dynamic signUpResult;
@@ -35,6 +35,7 @@ class UserMethods {
       FirebaseFirestore.instance.collection('users').doc(signUpResult.user.uid).set({
         'username' : username,
         'email' : email,
+        'type' : type,
       });
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {

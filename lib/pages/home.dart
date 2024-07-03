@@ -16,6 +16,7 @@ class _Home extends State<Home> {
   dynamic userID = FirebaseAuth.instance.currentUser?.uid;
   String temporaryID = '';
   String name = '';
+  int? groupValue = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +78,15 @@ class _Home extends State<Home> {
               print('delete $temporaryID');
             },
           ),
+          Radio(
+            value: 1,
+            groupValue: groupValue,
+            onChanged: (v){
+              setState(() {
+                groupValue = v;
+              });
+            },
+          )
         ],
       ),
     );
@@ -85,7 +95,7 @@ class _Home extends State<Home> {
     DocumentSnapshot data = await FirebaseFirestore.instance.collection('users').doc(userID).get();
     if (data.exists) {
       Map<String, dynamic>? fetchDoc = data.data() as Map<String, dynamic>?;
-      name = fetchDoc?['username'];
+      name = fetchDoc?['username']+fetchDoc?['type'];
     }
   }
 }
