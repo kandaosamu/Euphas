@@ -29,10 +29,8 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(50)),
               borderSide: BorderSide(color: Colors.grey, width: 2)),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
             borderSide: BorderSide(color: Colors.blue, width: 4),
           ),
         ),
