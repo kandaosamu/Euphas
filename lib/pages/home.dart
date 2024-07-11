@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
+import 'package:euphas/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:euphas/sub_pages/home_invitation.dart';
+import 'package:euphas/sub_pages/home_message.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,27 +15,24 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   final inviteController = TextEditingController();
-  final firestore = FirebaseFirestore.instance;
-  final auth = FirebaseAuth.instance;
 
-  dynamic currentId = FirebaseAuth.instance.currentUser?.uid;
-  String name = '';
   int currentPageIndex = 0;
   final navPage = [
-    Center(child: Text('Msg')),
+    BottomMessage(),
     Center(child: Text('Home')),
     Center(child: Text('Progress')),
   ];
   final drawerPage = [
-    Center(child: Text('Profile')),
-    Center(child: Text('Invitation')),
+    Center(child: Text('profile'),),
+    DrawerInvitation(),
   ];
 
   @override
   void initState() {
     super.initState();
-    firestore.collection('users').doc(currentId).get().then((value) {
-      name = value.data()!['name'];
+    userId = auth.currentUser!.uid;
+    firestore.collection('users').doc(userId).get().then((value) {
+      userName = value.data()!['name'];
       setState(() {});
     });
   }
@@ -42,7 +42,7 @@ class _Home extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(name),
+        title: Text(userName),
         actions: [
           IconButton(
               onPressed: () {

@@ -63,12 +63,11 @@ class UserMethods {
     return feedback;
   }
 
-  Future invite(String senderId, String senderName,String receiverId,
+  Future invite(String senderId, String senderName,
       String receiverEmail) async {
     Invitation invitation = Invitation(
-        senderId:senderId,
+        senderId: senderId,
         senderName: senderName,
-        receiverId: receiverId,
         receiverEmail: receiverEmail,
         message: senderName);
     await firestore

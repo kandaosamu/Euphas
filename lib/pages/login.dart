@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:euphas/constant.dart';
 import 'package:flutter/material.dart';
 
 import '../methods/user_methods.dart';
@@ -46,7 +47,7 @@ class _Login extends State<Login> {
                   ]),
               child: Center(
                 child: SizedBox(
-                  width: 500,
+                  width: screenWidth * 0.2,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
