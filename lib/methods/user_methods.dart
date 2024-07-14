@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:euphas/models/profile.dart';
 import 'package:euphas/models/invitation.dart';
+import 'package:euphas/constant.dart';
 
 class UserMethods {
-  final auth = FirebaseAuth.instance;
-  final firestore = FirebaseFirestore.instance;
-
   Future<String?> signIn(String email, String password) async {
     String? feedback;
     try {
@@ -28,8 +25,8 @@ class UserMethods {
     return feedback;
   }
 
-  Future<String?> signUp(String email, String password, String name,
-      String userType) async {
+  Future<String?> signUp(
+      String email, String password, String name, String userType) async {
     String? feedback;
     Profile profile = Profile(
         name: name,
@@ -63,8 +60,8 @@ class UserMethods {
     return feedback;
   }
 
-  Future invite(String senderId, String senderName,
-      String receiverEmail) async {
+  Future invite(
+      String senderId, String senderName, String receiverEmail) async {
     Invitation invitation = Invitation(
         senderId: senderId,
         senderName: senderName,

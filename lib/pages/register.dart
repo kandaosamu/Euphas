@@ -154,4 +154,11 @@ class _Register extends State<Register> {
       ),
     );
   }
+  @override
+  void dispose(){
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    nameController.dispose();
+  }
 }
