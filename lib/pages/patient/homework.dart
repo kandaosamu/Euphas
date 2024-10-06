@@ -3,7 +3,6 @@ import 'package:euphas/config/constants.dart';
 import 'package:euphas/pages/patient/naming_quiz.dart';
 import 'package:euphas/pages/patient/quiz.dart';
 import 'package:euphas/services/storage.dart';
-import 'package:euphas/ui/loading.dart';
 import 'package:flutter/material.dart';
 
 class HomeworkPage extends StatefulWidget {
