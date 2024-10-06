@@ -11,7 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 
-class Quiz extends StatefulWidget {
+class NamingQuiz extends StatefulWidget {
   final String title;
   final String sub;
   final List<String> database;
@@ -21,26 +21,25 @@ class Quiz extends StatefulWidget {
   final String? hwId;
   final int doneTimes;
 
-  const Quiz(
+  const NamingQuiz(
       {super.key,
-      required this.title,
-      required this.sub,
-      required this.database,
-      required this.trial,
-      required this.level,
-      required this.fileList,
-      required this.hwId,
-      required this.doneTimes});
+        required this.title,
+        required this.sub,
+        required this.database,
+        required this.trial,
+        required this.level,
+        required this.fileList,
+        required this.hwId,
+        required this.doneTimes});
 
   @override
-  State<Quiz> createState() => _Quiz();
+  State<NamingQuiz> createState() => _NamingQuiz();
 }
 
-class _Quiz extends State<Quiz> {
+class _NamingQuiz extends State<NamingQuiz> {
   int order = 0;
   List<String> options = [];
   String answer = '';
-  int score = 0;
   bool isRecording = false;
   AudioRecorder recorder = AudioRecorder();
   AudioPlayer audioPlayer = AudioPlayer();
@@ -131,30 +130,12 @@ class _Quiz extends State<Quiz> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leadingWidth: screenWidth * 0.15,
-        leading: Row(
-          children: [
-            IconButton(
+        leading: IconButton(
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home(profile: currentProfile)), (route) => false);
                 },
                 icon: const Icon(Icons.arrow_back_sharp)),
-            Visibility(
-              visible: widget.title == '看圖說單字',
-              child: IconButton(
-                  onPressed: () => isRecording ? stopRecording() : startRecording(),
-                  icon: isRecording ? const Icon(Icons.stop_circle) : const Icon(Icons.mic)),
-            ),
-            Visibility(
-              visible: filePath == null || filePath == '' ? false : true,
-              child: IconButton(
-                  onPressed: () {
-                    playRecording();
-                  },
-                  icon: const Icon(Icons.play_arrow)),
-            ),
-          ],
-        ),
+
         title: SizedBox(
             width: screenWidth * 0.15,
             child: Stack(
@@ -174,17 +155,6 @@ class _Quiz extends State<Quiz> {
                 ),
               ],
             )),
-        actions: [
-          Center(
-            child: Text(
-              '$score',
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          const SizedBox(
-            width: 50,
-          )
-        ],
       ),
       body: Center(
         child: Column(
@@ -194,51 +164,39 @@ class _Quiz extends State<Quiz> {
             widget.fileList.isEmpty
                 ? const Loading()
                 : Image.network(
-                    widget.fileList[order]['url']!,
-                    width: screenWidth * 0.3,
-                    height: screenHeight * 0.2,
-                    fit: BoxFit.contain,
-                  ),
-            GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 4,
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.03),
-                mainAxisSpacing: 50,
-                childAspectRatio: 1.7,
-                crossAxisSpacing: 50,
-                children: List.generate(4, (index) {
-                  return ElevatedButton(
-                      onPressed: () async {
-                        if (listAnswered.length < order + 1 || !listAnswered[order]) {
-                          if (options[index] == answer) {
-                            setState(() {
-                              score++;
-                              // isAnswered[index] = true;
-                            });
-                          }
-                          listAnswered.add(true);
-                        }
-                        await Future.delayed(const Duration(milliseconds: 500));
-                        if (order < (widget.trial - 1)) {
-                          setState(() {
-                            order++;
-                            setOptions();
-                          });
-                        } else if (order == (widget.trial - 1)) {
-                          showGradeDialog(score, widget.trial);
-                        }
+              widget.fileList[order]['url']!,
+              width: screenWidth * 0.3,
+              height: screenHeight * 0.2,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: screenHeight*0.03,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: () => isRecording ? stopRecording() : startRecording(),
+                    icon: isRecording ? const Icon(Icons.stop_circle,color: Colors.red,) : const Icon(Icons.mic,color: Colors.blue,),
+                  iconSize: 100,
+                ),
+                Visibility(
+                  visible: filePath == null || filePath == '' ? false : true,
+                  child: IconButton(
+                      onPressed: () {
+                        playRecording();
                       },
-                      child: Text(
-                        options[index],
-                        style: const TextStyle(fontSize: 30),
-                      ));
-                })),
+                      icon: const Icon(Icons.play_arrow,color: Colors.green),
+                  iconSize: 100
+                  ),
+                ),
+              ],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: IconButton(
+                    iconSize: 100,
                       onPressed: () {
                         if (order > 0) {
                           setState(() {
@@ -255,15 +213,25 @@ class _Quiz extends State<Quiz> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: IconButton(
+                    iconSize: 100,
                       onPressed: () {
-                        if (order < (widget.trial - 1)) {
+                        if (order < (widget.trial - 1)&& filePath!='') {
                           setState(() {
                             order++;
                             setOptions();
                             filePath = '';
                           });
-                        } else if (order == (widget.trial - 1)) {
-                          showGradeDialog(score, widget.trial);
+                        } else if(filePath==null||filePath==''){
+                          showDialog(
+                              context: context, builder: (context){
+                            return const AlertDialog(
+                              title: Text('尚未錄音！',
+                              style: medium,),
+                              actions: [],
+                            );
+                          });
+                        }else if (order == (widget.trial - 1)) {
+                          showGradeDialog(widget.trial);
                         }
                       },
                       icon: const Icon(
@@ -279,24 +247,20 @@ class _Quiz extends State<Quiz> {
     );
   }
 
-  Future<void> showGradeDialog(int score, int trial) {
+  Future<void> showGradeDialog(int trial) {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: const Text(
-              '成績',
-              style: mediumBold,
-            ),
-            content: Text(
-              '$score/$trial (${(score * 100 / trial).toStringAsFixed(2)}%)',
+              '練習結束～',
               style: medium,
             ),
             actions: [
               TextButton(
                 onPressed: () {
                   if (widget.hwId != null) {
-                    FireStoreService().saveGrade(widget.hwId, score, trial, audioPathList);
+                    FireStoreService().saveGrade(widget.hwId, trial, trial, audioPathList);
                   }
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home(profile: currentProfile)), (route) => false);
                 },

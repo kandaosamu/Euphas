@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:euphas/config/constants.dart';
+import 'package:euphas/pages/patient/naming_quiz.dart';
 import 'package:euphas/pages/patient/quiz.dart';
 import 'package:euphas/services/storage.dart';
 import 'package:euphas/ui/loading.dart';
@@ -90,7 +91,23 @@ class _HomeworkPageState extends State<HomeworkPage> {
                                         .getImageList(data?['level'], content, data?['trial']);
 
                                     if (context.mounted) {
+                                      data?['subCategory']=='看圖說單字'?
                                       Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => NamingQuiz(
+                                              title: data?['category'],
+                                              sub: data?['subCategory'],
+                                              database: content,
+                                              trial: data?['trial'],
+                                              level: data?['level'],
+                                              fileList: fileList,
+                                              hwId: data?['hwId'],
+                                              doneTimes: data?['doneTimes'],
+                                            )),
+                                            (Route<dynamic> route) => false,
+                                      )
+                                      :Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Quiz(

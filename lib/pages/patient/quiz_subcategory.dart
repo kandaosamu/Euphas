@@ -8,6 +8,8 @@ import 'package:euphas/ui/card_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'naming_quiz.dart';
+
 class QuizSubCategory extends StatefulWidget {
   const QuizSubCategory({super.key, required this.category});
 
@@ -248,7 +250,22 @@ class _QuizSubCategoryState extends State<QuizSubCategory> {
                       List<Map<String,String>> fileList = await Storage().getImageList(notifier.quizSetting['level'],
                           notifier.quizSetting['database'], notifier.quizSetting['trial']);
                       if(context.mounted){
+                        notifier.quizSetting['subCategory']=='看圖說單字'?
                         Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NamingQuiz(
+                                  title: widget.category,
+                                  sub: notifier.quizSetting['subCategory'],
+                                  database: notifier.quizSetting['database'],
+                                  trial: notifier.quizSetting['trial'],
+                                  level: notifier.quizSetting['level'],
+                                  fileList: fileList,
+                                  hwId: '',
+                                  doneTimes: 0,
+                                )),
+                                (route) => false)
+                        :Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Quiz(

@@ -21,6 +21,7 @@ class _NaviState extends State<Navi> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, stream) {
           if (stream.connectionState == ConnectionState.waiting) {
+
             return const Loading();
           } else if (stream.hasData) {
             return FutureBuilder(
